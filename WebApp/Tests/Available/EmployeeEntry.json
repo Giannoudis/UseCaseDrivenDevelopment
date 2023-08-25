@@ -1,0 +1,7 @@
+[
+  {
+    "name": "EmployeeEntryAvailableTest",
+    "caseName": "EmployeeEntry",
+    "expectedAvailable": true
+  }
+]

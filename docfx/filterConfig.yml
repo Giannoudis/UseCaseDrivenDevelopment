@@ -1,0 +1,19 @@
+apiRules:
+- exclude:
+    uidRegex: ^UseCaseDrivenDevelopment\.CaseManagement\.Compiler
+    type: Type
+- exclude:
+    uidRegex: ^UseCaseDrivenDevelopment\.CaseManagement\.Model
+    type: Type
+- exclude:
+    uidRegex: ^UseCaseDrivenDevelopment\.CaseManagement\.Model
+    type: Type
+- exclude:
+    uidRegex: ^UseCaseDrivenDevelopment\.CaseManagement\.Runtime
+    type: Type
+- exclude:
+    uidRegex: ^UseCaseDrivenDevelopment\.CaseManagement\.Service
+    type: Type
+- exclude:
+    uidRegex: ^UseCaseDrivenDevelopment\.CaseManagement\.Shared
+    type: Type

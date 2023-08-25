@@ -1,0 +1,96 @@
+﻿@page "/casetests"
+@using UseCaseDrivenDevelopment.WebApp.Shared
+
+<PageTitle>Case Tests</PageTitle>
+
+@* --- case values --- *@
+<MudText Typo="Typo.h5" Class="my-4">Case Tests</MudText>
+
+@if (caseTests != null && caseTests.Count > 0)
+{
+    @* --- busy indicator --- *@
+    @if (TestRunning)
+    {
+        <MudProgressLinear Color="Color.Info" Rounded="true"
+                           Class="mud-table-loading-progress"
+                           Indeterminate="true"/>
+    }
+
+    @* --- tests data grid --- *@
+    <MudDataGrid T="CaseTestItem"
+                 Items="caseTests"
+                 Hideable="false"
+                 ShowColumnOptions="false"
+                 Filterable="true"
+                 FilterMode="DataGridFilterMode.ColumnFilterMenu"
+                 ColumnResizeMode="ResizeMode.Column"
+                 SortMode="SortMode.Single">
+        <Columns>
+            <PropertyColumn Property="x => x.TypeName" Title="Type"/>
+            <PropertyColumn Property="x => x.Name" Title="Name"/>
+            <PropertyColumn Property="x => x.CaseName" Title="Case"/>
+            <PropertyColumn Property="x => x.Result.Executed" Title="Test Date"/>
+            <PropertyColumn Property="x => x.Result.Valid" Title="Result">
+                <CellTemplate>
+                    @if (context.Item.Result.Valid.HasValue)
+                    {
+                        @if (context.Item.Result.Valid.Value)
+                        {
+                            <MudIcon Color="Color.Tertiary"
+                                     Icon="@Icons.Material.Outlined.CheckCircleOutline"/>
+                        }
+                        else
+                        {
+                            <MudIcon Color="Color.Error"
+                                     Icon="@Icons.Material.Outlined.ErrorOutline"/>
+                        }
+                    }
+                </CellTemplate>
+            </PropertyColumn>
+            <PropertyColumn Property="x => x.Result.Source" Title="Source"/>
+            <PropertyColumn Property="x => x.Result.Expected" Title="Expected"/>
+            <PropertyColumn Property="x => x.Result.Actual" Title="Actual"/>
+            <TemplateColumn T="CaseTestItem" CellStyle="text-align: right" 
+                            Title="Test"
+                            Filterable="false"
+                            Sortable="false">
+                <HeaderTemplate>
+                    <MudStack Row="true" Justify="Justify.FlexEnd" Class="d-flex flex-grow-1">
+                        <MudButton @onclick="@StartAllTests"
+                                   Color="Color.Tertiary"
+                                   Variant="Variant.Outlined"
+                                   Size="Size.Small">
+                            Test All
+                        </MudButton>
+                    </MudStack>
+                </HeaderTemplate>
+                <FilterTemplate/>
+                <CellTemplate>
+                    <MudIconButton @onclick="@(() => StartTest(context.Item))"
+                                   Color="Color.Tertiary"
+                                   Variant="Variant.Outlined"
+                                   Size="Size.Small">
+                        Test
+                    </MudIconButton>
+                </CellTemplate>
+            </TemplateColumn>
+        </Columns>
+        <PagerContent>
+            <MudDataGridPager T="CaseTestItem"/>
+        </PagerContent>
+    </MudDataGrid>
+}
+else
+{
+    <MudPaper Typo="Typo.caption" Class="mt-4 pa-4" Style="Width: fit-content;">
+        No case tests available.
+    </MudPaper>
+}
+
+@* --- messages --- *@
+@if (!string.IsNullOrWhiteSpace(ErrorMessage))
+{
+    <MudPaper Typo="Typo.caption" Class="mt-4 pa-4 mud-error" Style="Width: fit-content;">
+        @ErrorMessage
+    </MudPaper>
+}

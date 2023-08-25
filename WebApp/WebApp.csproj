@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>UseCaseDrivenDevelopment.WebApp</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="Data\CaseFields.json" />
+    <Content Remove="Data\Cases.json" />
+    <Content Remove="Data\CaseValues.json" />
+    <Content Remove="Tests\Available\EmployeeEntry.json" />
+    <Content Remove="Tests\Build\EmployeeEntry.json" />
+    <Content Remove="Tests\Validate\EmployeeEntry.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Data\CaseFields.json" />
+    <_ContentIncludedByDefault Remove="Data\Cases.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Data\CaseValues.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\CaseFields.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\Cases.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Tests\Available\EmployeeEntry.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Tests\Build\EmployeeEntry.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Tests\Validate\EmployeeEntry.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MudBlazor" Version="6.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CaseManagement.Test\CaseManagement.Test.csproj" />
+    <ProjectReference Include="..\CaseManagement\CaseManagement.csproj" />
+  </ItemGroup>
+
+</Project>

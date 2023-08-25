@@ -1,0 +1,30 @@
+[
+  {
+    "name": "EmployeeEntryBuildTest",
+    "caseName": "EmployeeEntry",
+    "caseValues": [
+      {
+        "field": "EmployeeEntryDate",
+        "period": {
+          "start": "2023-09-01T00:00:00.0Z"
+        }
+      },
+      {
+        "field": "EmployeeSalary",
+        "period": {
+          "start": "2023-09-01T00:00:00.0Z"
+        },
+        "value": "3500"
+      }
+    ],
+    "expectedCaseValues": [
+      {
+        "field": "EmployeeEntryDate",
+        "period": {
+          "start": "2023-09-01T00:00:00.0Z"
+        },
+        "value": "\u00222023-09-01T00:00:00.0Z\u0022"
+      }
+    ]
+  }
+]

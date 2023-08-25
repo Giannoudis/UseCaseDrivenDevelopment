@@ -1,0 +1,155 @@
+﻿@page "/"
+@using UseCaseDrivenDevelopment.CaseManagement.Shared
+@using UseCaseDrivenDevelopment.WebApp.Shared
+
+<PageTitle>Cases</PageTitle>
+
+@* --- evaluation date --- *@
+<MudText Typo="Typo.h5" Class="mb-4">Working Day @GetEvaluationDay()</MudText>
+<div style="width: fit-content;">
+    <MudDatePicker @bind-Date="@PickerEvaluationDate"
+                   DisableToolbar="true"
+                   Elevation="4"
+                   PickerVariant="PickerVariant.Static">
+    </MudDatePicker>
+</div>
+
+@* --- available cases --- *@
+<MudText Typo="Typo.h5" Class="my-4">Available Cases</MudText>
+
+@if (availableCases == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else if (availableCases.Count > 0)
+{
+    <div>
+        @foreach (var availableCase in availableCases)
+        {
+            <MudButton Variant="Variant.Filled"
+                       Class="mr-4"
+                       Color="Color.Primary"
+                       Disabled="@(EditCase != null)"
+                       OnClick="@(_ => StartCase(availableCase))">
+                @(availableCase.Label ?? availableCase.Name)
+            </MudButton>
+        }
+    </div>
+}
+else
+{
+    <MudPaper Typo="Typo.caption" Class="mt-4 pa-4" Style="Width: fit-content;">
+        No cases available at @EvaluationDate.ToCompactString().
+    </MudPaper>
+}
+
+@* --- editing case --- *@
+@if (EditCase != null)
+{
+    <MudPaper Elevation="4" Class="pa-4 mt-4" Style="width: fit-content">
+        <MudText Typo="Typo.h6">
+            Case @(EditCase.Label ?? EditCase.Name)
+        </MudText>
+
+        <MudForm @ref="@caseForm">
+            @foreach (var editField in EditFields)
+            {
+                <CaseFieldEdit CaseField="@editField.Key" CaseValue="@editField.Value"
+                               DataChanged="CaseValueDataChanged" />
+            }
+        </MudForm>
+
+        @* --- case validation --- *@
+        @if (!string.IsNullOrWhiteSpace(EditCase.ValidateExpression))
+        {
+            <MudCheckBox T="bool" @bind-Checked="@ShowValidation" Label="Show validation" />
+            @if (ShowValidation)
+            {
+                <MudPaper Typo="Typo.caption" Class="pa-2 mud-info" Style="Width: fit-content;">
+                    <MudText Style="font-family: monospace;">
+                        @EditCase.ValidateExpression
+                    </MudText>
+                </MudPaper>
+            }
+        }
+
+        <div class="mt-4">
+            <MudButton Variant="Variant.Filled"
+                       Class="mr-2"
+                       Color="Color.Primary"
+                       OnClick="@SubmitCaseEditAsync">
+                Submit
+            </MudButton>
+            <MudButton Variant="Variant.Filled"
+                       Color="Color.Secondary"
+                       OnClick="@CancelCaseEdit">
+                Cancel
+            </MudButton>
+        </div>
+    </MudPaper>
+}
+
+@* --- messages --- *@
+@if (!string.IsNullOrWhiteSpace(ErrorMessage))
+{
+    <MudPaper Typo="Typo.caption" Class="mt-4 pa-4 mud-error" Style="Width: fit-content;">
+        @ErrorMessage
+    </MudPaper>
+}
+
+@* --- case values --- *@
+@if (EditCase == null && caseFields != null)
+{
+    <MudText Typo="Typo.h5" Class="mt-4">Case Values</MudText>
+
+    @if (caseValues != null && caseValues.Count > 0)
+    {
+        <MudSimpleTable Class="mt-4"
+                        Style="overflow-x: auto; width: fit-content; min-width: 50rem">
+            <thead>
+                <tr>
+                    <th>Field</th>
+                    <th>Created</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var caseField in caseFields)
+                {
+                    var value = GetCaseValueText(caseField);
+                    if (string.IsNullOrWhiteSpace(value))
+                    {
+                        continue;
+                    }
+                    <tr>
+                        <td style="padding-right: 30px">
+                            @(caseField.Label ?? caseField.Name)
+                        </td>
+                        <td style="padding-right: 30px">
+                            @GetCaseValueCreatedText(caseField)
+                        </td>
+                        <td style="padding-right: 30px">
+                            @GetCaseValueStartText(caseField)
+                        </td>
+                        <td style="padding-right: 30px">
+                            @GetCaseValueEndText(caseField)
+                        </td>
+                        <td style="padding-right: 30px">
+                            @value
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </MudSimpleTable>
+    }
+    else
+    {
+        <MudPaper Typo="Typo.caption" Class="mt-4 pa-4" Style="Width: fit-content;">
+            No case values available at @EvaluationDate.ToCompactString().
+        </MudPaper>
+    }
+}

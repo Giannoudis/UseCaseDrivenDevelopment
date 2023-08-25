@@ -1,0 +1,51 @@
+﻿@inherits LayoutComponentBase
+
+<PageTitle>CaseDrivenTimeData</PageTitle>
+
+<MudThemeProvider @ref="@mudThemeProvider" @bind-IsDarkMode="@IsDarkMode"/>
+
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" 
+                       Title="Toggle Sidebar"
+                       Color="Color.Inherit" 
+                       Edge="Edge.Start" 
+                       OnClick="@NavBarToggle"/>
+        <MudText Typo="Typo.h5">
+            Use Case Driven Development
+        </MudText>
+        <MudSpacer/>
+        <MudToggleIconButton @bind-Toggled="@IsDarkMode"
+                             Icon="@Icons.Material.Filled.DarkMode" Color="@Color.Inherit" Title="To dark mode"
+                             ToggledIcon="@Icons.Material.Filled.LightMode" ToggledTitle="To light mode"/>
+    </MudAppBar>
+    <MudDrawer @bind-Open="NavBarOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+        <NavMenu/>
+    </MudDrawer>
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="my-4">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    private bool IsDarkMode { get; set; } = true;
+    private bool NavBarOpen { get; set; } = true;
+    private MudThemeProvider? mudThemeProvider;
+
+    private void NavBarToggle()
+    {
+        NavBarOpen = !NavBarOpen;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && mudThemeProvider != null)
+        {
+            IsDarkMode = await mudThemeProvider.GetSystemPreference();
+            StateHasChanged();
+        }
+    }
+
+}

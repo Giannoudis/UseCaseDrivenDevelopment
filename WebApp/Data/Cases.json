@@ -1,0 +1,34 @@
+[
+  {
+    "name": "EmployeeEntry",
+    "label": "Employee Entry",
+    "availableExpression": "!HasCaseValue(\"EmployeeEntryDate\") || GetCaseDateTimeValue(\"EmployeeLeaveDate\") > GetCaseDateTimeValue(\"EmployeeEntryDate\")",
+    "buildExpression": "SetEditValueStart(\"EmployeeEntryDate\"); SetVisibility(\"EmployeeInsurance\", GetDecimalValue(\"EmployeeSalary\") >= 5000);",
+    "validateExpression": "GetEditStart(\"EmployeeEntryDate\") == GetEditStart(\"EmployeeSalary\") && EditValueBetween(\"EmployeeSalary\", 100, 10000) && EditValueBetween(\"EmployeeInsurance\", 0, 150)",
+    "fields": [
+      "EmployeeEntryDate",
+      "EmployeeSalary",
+      "EmployeeInsurance"
+    ]
+  },
+  {
+    "name": "EmployeeSalary",
+    "label": "Employee Salary",
+    "availableExpression": "HasCaseValue(\"EmployeeEntryDate\") && GetCaseDateTimeValue(\"EmployeeEntryDate\") > GetCaseDateTimeValue(\"EmployeeLeaveDate\", DateTime.MinValue)",
+    "buildExpression": "SetVisibility(\"EmployeeInsurance\", GetDecimalValue(\"EmployeeSalary\") >= 5000);",
+    "validateExpression": "EditValueBetween(\"EmployeeSalary\", 100, 10000) && EditValueBetween(\"EmployeeInsurance\", 0, 150)",
+    "fields": [
+      "EmployeeSalary",
+      "EmployeeInsurance"
+    ]
+  },
+  {
+    "name": "EmployeeLeave",
+    "label": "Employee Leave",
+    "availableExpression": "HasCaseValue(\"EmployeeEntryDate\") && GetCaseDateTimeValue(\"EmployeeEntryDate\") > GetCaseDateTimeValue(\"EmployeeLeaveDate\", DateTime.MinValue)",
+    "buildExpression": "SetEditValueStart(\"EmployeeLeaveDate\")",
+    "fields": [
+      "EmployeeLeaveDate"
+    ]
+  }
+]

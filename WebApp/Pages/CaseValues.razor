@@ -1,0 +1,72 @@
+﻿@page "/casevalues"
+
+<PageTitle>Case Values</PageTitle>
+
+
+@* --- case values --- *@
+<MudText Typo="Typo.h5" Class="mt-4">Case Values</MudText>
+
+@if (caseValues != null && caseValues.Count > 0)
+{
+    <MudSimpleTable Class="mt-4"
+                    Style="overflow-x: auto; width: fit-content; min-width: 50rem">
+        <thead>
+        <tr>
+            <th>Field</th>
+            <th>Created</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Value</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var caseValue in caseValues)
+        {
+            var value = GetCaseValueText(caseValue);
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                continue;
+            }
+            <tr>
+                <td style="padding-right: 30px">
+                    @GetCaseFieldText(caseValue.Field)
+                </td>
+                <td style="padding-right: 30px">
+                    @GetCaseValueCreatedText(caseValue)
+                </td>
+                <td style="padding-right: 30px">
+                    @GetCaseValueStartText(caseValue)
+                </td>
+                <td style="padding-right: 30px">
+                    @GetCaseValueEndText(caseValue)
+                </td>
+                <td style="padding-right: 30px">
+                    @value
+                </td>
+            </tr>
+        }
+        </tbody>
+    </MudSimpleTable>
+
+    @* --- clear case values --- *@
+    <MudButton Variant="Variant.Filled"
+               Class="mt-4"
+               Color="Color.Primary"
+               OnClick="@ClearCaseValuesAsync">
+        Clear all
+    </MudButton>
+}
+else
+{
+    <MudPaper Typo="Typo.caption" Class="mt-4 pa-4" Style="Width: fit-content;">
+        No case values available.
+    </MudPaper>
+}
+
+@* --- messages --- *@
+@if (!string.IsNullOrWhiteSpace(ErrorMessage))
+{
+    <MudPaper Typo="Typo.caption" Class="mt-4 pa-4 mud-error" Style="Width: fit-content;">
+        @ErrorMessage
+    </MudPaper>
+}

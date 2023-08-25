@@ -1,0 +1,243 @@
+﻿@using System.Text.Json
+@using UseCaseDrivenDevelopment.CaseManagement.Model
+@using UseCaseDrivenDevelopment.CaseManagement.Shared
+
+@if (CaseField != null && CaseValue != null && !CaseField.Hidden)
+{
+    <MudPaper Class="pa-2 mb-2">
+        <div style="font-size: larger">@(CaseField.Label ?? CaseField.Name)</div>
+        <table style="margin-bottom: 10px">
+            <tbody>
+                <tr>
+                    <td class="pr-4" style="width: 15rem;">
+                        <MudDatePicker @bind-Date="@ValueStart"
+                                       MaxDate="@ValueEnd"
+                                       Editable="true"
+                                       Label="Start"
+                                       HelperText="Start date" />
+                    </td>
+                    <td class="pr-4" style="width: 15rem;">
+                        @if (!CaseField.Moment)
+                        {
+                            <MudDatePicker @bind-Date="@ValueEnd"
+                                           MinDate="@ValueStart"
+                                           Editable="true"
+                                           Label="End"
+                                           HelperText="@PeriodEndHelp" />
+                        }
+                    </td>
+                    <td style="width: 20rem;">
+                        @switch (CaseField.ValueType)
+                        {
+                            case CaseFieldValueType.String:
+                                <MudTextField @bind-Value="@ValueAsString"
+                                              Required="@CaseField.Required"
+                                              Label="Value"
+                                              HelperText="Text value" />
+                                break;
+                            case CaseFieldValueType.DateTime:
+                                <MudDatePicker @bind-Date="@ValueAsDateTime"
+                                               Required="@CaseField.Required"
+                                               Editable="true"
+                                               Label="Value"
+                                               HelperText="Date value" />
+                                break;
+                            case CaseFieldValueType.Integer:
+                                <MudNumericField T="int?" @bind-Value="@ValueAsInteger"
+                                                 Required="@CaseField.Required"
+                                                 Min="@GetIntegerAttribute("minValue")"
+                                                 Max="@GetIntegerAttribute("maxValue")"
+                                                 Label="Value"
+                                                 HelperText="Numeric value" />
+                                break;
+                            case CaseFieldValueType.Boolean:
+                                <MudSwitch T="bool?" @bind-Checked="@ValueAsBoolean"
+                                           Label="Value" />
+                                break;
+                            case CaseFieldValueType.Decimal:
+                                <MudNumericField T="decimal?" @bind-Value="@ValueAsDecimal"
+                                                 Required="@CaseField.Required"
+                                                 Format="@SystemSpecification.DecimalFormat"
+                                                 Min="@GetDecimalAttribute("minValue")"
+                                                 Max="@GetDecimalAttribute("maxValue")"
+                                                 Label="Value"
+                                                 HelperText="Decimal value" />
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </MudPaper>
+}
+
+@code {
+
+    [Parameter]
+    public CaseField? CaseField { get; set; }
+
+    [Parameter]
+    public CaseValue? CaseValue { get; set; }
+
+    [Parameter]
+    public EventCallback<string> DataChanged { get; set; }
+
+    #region Start and End
+
+    private DateTime? ValueStart
+    {
+        get => CaseValue?.Period.Start;
+        set
+        {
+            if (CaseValue == null ||
+                (value.HasValue && value.Value == CaseValue.Period.Start))
+            {
+                return;
+            }
+            CaseValue.Period.Start = value ?? DateTime.UtcNow;
+            Task.Run(DataChangedHandler);
+        }
+    }
+
+    private DateTime? ValueEnd
+    {
+        get => CaseValue?.Period.End;
+        set
+        {
+            if (CaseValue == null || value == CaseValue.Period.End)
+            {
+                return;
+            }
+            CaseValue.Period.End = value;
+            Task.Run(DataChangedHandler);
+        }
+    }
+
+    private string PeriodEndHelp
+    {
+        get
+        {
+            var help = "End date";
+            var start = ValueStart;
+            var end = ValueEnd;
+            if (start != null && end != null)
+            {
+                help += $" ({(end.Value.Date - start.Value.Date).Days} Days)";
+            }
+            return help;
+        }
+    }
+
+    #endregion
+
+    #region Value
+
+    private string? ValueAsString
+    {
+        get => CaseValue?.Value != null ? JsonSerializer.Deserialize<string>(CaseValue.Value) : null;
+        set
+        {
+            var existingValue = ValueAsString;
+            if (CaseValue == null || string.Equals(existingValue, value))
+            {
+                return;
+            }
+            CaseValue.Value = JsonSerializer.Serialize(value);
+            Task.Run(DataChangedHandler);
+        }
+    }
+
+    private DateTime? ValueAsDateTime
+    {
+        get => CaseValue?.Value != null ? JsonSerializer.Deserialize<DateTime?>(CaseValue.Value) : null;
+        set
+        {
+            var existingValue = ValueAsDateTime;
+            if (CaseValue == null || existingValue == value)
+            {
+                return;
+            }
+            CaseValue.Value = JsonSerializer.Serialize(value);
+            Task.Run(DataChangedHandler);
+        }
+    }
+
+    private int? ValueAsInteger
+    {
+        get => CaseValue?.Value != null ? JsonSerializer.Deserialize<int?>(CaseValue.Value) : null;
+        set
+        {
+            var existingValue = ValueAsInteger;
+            if (CaseValue == null || value == existingValue)
+            {
+                return;
+            }
+            CaseValue.Value = JsonSerializer.Serialize(value);
+            Task.Run(DataChangedHandler);
+        }
+    }
+
+    private bool? ValueAsBoolean
+    {
+        get => CaseValue?.Value != null ? JsonSerializer.Deserialize<bool?>(CaseValue.Value) : null;
+        set
+        {
+            var existingValue = ValueAsBoolean;
+            if (CaseValue == null || existingValue == value)
+            {
+                return;
+            }
+            CaseValue.Value = JsonSerializer.Serialize(value);
+            Task.Run(DataChangedHandler);
+        }
+    }
+
+    private decimal? ValueAsDecimal
+    {
+        get => CaseValue?.Value != null ? JsonSerializer.Deserialize<decimal?>(CaseValue.Value) : null;
+        set
+        {
+            var existingValue = ValueAsDecimal;
+            if (CaseValue == null || existingValue == value)
+            {
+                return;
+            }
+            CaseValue.Value = JsonSerializer.Serialize(value);
+            Task.Run(DataChangedHandler);
+        }
+    }
+
+    #endregion
+
+    #region Attribute
+
+    /// <summary>Get case field integer attribute value</summary>
+    /// <returns>The attribute integer value</returns>
+    private int? GetIntegerAttribute(string attributeName)
+    {
+        if (CaseField == null)
+        {
+            return null;
+        }
+        return CaseField.GetAttribute<int?>(attributeName);
+    }
+
+    /// <summary>Get case field decimal attribute value</summary>
+    /// <returns>The attribute decimal value</returns>
+    private decimal? GetDecimalAttribute(string attributeName)
+    {
+        if (CaseField == null)
+        {
+            return null;
+        }
+        return CaseField.GetAttribute<decimal?>(attributeName);
+    }
+
+    #endregion
+
+    private async Task DataChangedHandler() =>
+        await DataChanged.InvokeAsync();
+
+}

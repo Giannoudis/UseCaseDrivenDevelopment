@@ -1,0 +1,36 @@
+[
+  {
+    "name": "EmployeeEntryDate",
+    "label": "Entry date",
+    "valueType": "DateTime",
+    "required": true,
+    "moment": true
+  },
+  {
+    "name": "EmployeeLeaveDate",
+    "label": "Leave date",
+    "ValueType": "DateTime",
+    "required": true,
+    "moment": true
+  },
+  {
+    "name": "EmployeeSalary",
+    "label": "Salary",
+    "valueType": "Decimal",
+    "required": true,
+    "attributes": {
+      "minValue": "100",
+      "maxValue": "10000"
+    }
+  },
+  {
+    "name": "EmployeeInsurance",
+    "label": "Insurance",
+    "valueType": "Decimal",
+    "hidden": true,
+    "attributes": {
+      "minValue": "0",
+      "maxValue": "150"
+    }
+  }
+]
