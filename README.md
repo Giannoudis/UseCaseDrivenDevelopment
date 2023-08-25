@@ -36,7 +36,7 @@ Cases are managed in the web application through the following pages
 
 The Blazor Server application uses the open source component [MudBlazor](https://github.com/MudBlazor/MudBlazor/), which I recommend to C# oriented developers. To keep the application simple, all data is stored in JSON [files](#case-configuration).
 
-The timeline is controlled by selecting the `working day` that represents the evaluation date. The available cases and case data are displayed from the time of the working day. This setting is used to simulate past and future input. In normal operation, this is the current day.
+The timeline is controlled by selecting the `Working Day` that represents the evaluation date. The available cases and case data are displayed from the time of the working day. This setting is used to simulate past and future input. In normal operation, this is the current day.
 <p align="center">
     <img src="docs/CaseManage.png" width="500" alt="Case Manage" />
 </p>
@@ -63,7 +63,7 @@ The `Case Tests` page allows you to run custom tests:
 ### Case Model
 The business data is described by three objects:
 - `Case` - Case with fields and the script expressions for availability (`Available`), build (`Build`), and server-side validation (`Validate`).
-- `Case Field` - Case field with data type and basic properties such as `Required`, `Hiiden` and for client-side validation the `Attributes`. A field can be shared by multiple cases.
+- `Case Field` - Case field with data type and basic properties such as `Required`, `Hidden` and for client-side validation the `Attributes`. A field can be shared by multiple cases.
 - `Case Value` - The value of a field, including the validity period of the value. Read more about [Time Data](https://github.com/Giannoudis/TravelThroughTimeData).
 
 
@@ -275,7 +275,7 @@ public abstract class CaseRuntime
     public bool HasCaseValue(string caseFieldName, DateTime? evaluationDate = null) =>
         valueService.GetCaseValue(caseFieldName, evaluationDate ?? Context.EvaluationDate) != null;
 
-   ....
+   ...
 }
 ```
 
