@@ -207,7 +207,7 @@ With `caseValues` all input values are simulated and a valid validation result `
 At runtime, the Case C# expressions are embedded into a function and dynamically compiled into an assembly using the [Roslyn](https://github.com/dotnet/roslyn) C# compiler. Then the function that contains the expression is called (e.g. `CaseAvailableFunction.Availablle()`). At runtime, the function provides various methods to access stored case values as well as the current input data.
 
 <p align="center">
-    <img src="docs/CaseRuntime.png" width="700" alt="Case Model" />
+    <img src="docs/CaseRuntime.png" width="700" alt="Case Runtime" />
 </p>
 
 ### Case Classes
