@@ -13,7 +13,7 @@ The following approach describes `low-code` solution development driven by use c
 - `JSON` - Knowledge of JSON to define the static structures.
 - `C#` - Basic knowledge of C# at the Excel function level to define the dynamic runtime behavior.
 
-### Business Case Example
+## Business Case Example
 To illustrate, let's take the use case of hiring an employee from HR software:
 <p align="center">
     <img src="docs/EmployeeUseCases.png" width="500" alt="Employee Use Cases" />
@@ -279,7 +279,7 @@ public abstract class CaseRuntime
 }
 ```
 
-### Low-Code Documentation
+## Low-Code Documentation
 Tools like [DocFx](https://github.com/dotnet/docfx) provide the ability to display the programmable functions in HTML pages. They are used with the following commands in the `docfx` folder:
 - `Static.Build.cmd` - builds static HTML documentation
 - `Static.Start.cmd` - starts the static HTML documentation (requires the build command)
