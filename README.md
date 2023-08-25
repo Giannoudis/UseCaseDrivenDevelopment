@@ -1,6 +1,5 @@
 # Use Case Driven Development with Low-Code
 
-### Use Case Driven Software
 Gathering user requirements using use cases is a proven technique that Alistair Cockburn described in detail in his book [Writing Effective Use Cases](https://books.google.ch/books?id=p-anAgAAQBAJ&hl=de&source=gbs_book_other_versions) back in 2000. The use cases are developed during requirements engineering with the users and serve as a guide for the development of the solution. In practice, knowledge transfer from business to engineering is often difficult because of the different ways in which people work.
 
 New technologies make it possible to build software solutions that can be created by technically skilled users themselves. The following requirements must be met:
